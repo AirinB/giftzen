@@ -1,14 +1,14 @@
-import logo from './logo.svg';
 import React from 'react'
-import ReactDOM from 'react-dom';
-import Clock from "./Clock";
+import BasicCard from "./BasicCard";
 
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <Clock date={new Date()}/>
+    <div className="App" style={{ display: 'grid', justifyContent: 'center', contextAlign: 'center', gap: '4px',
+        gridoutFlow: 'column'}}>
+     <BasicCard/>
+     <BasicCard/>
     </div>
   );
 }

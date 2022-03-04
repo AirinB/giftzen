@@ -5,8 +5,7 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App" style={{ display: 'grid', justifyContent: 'center', contextAlign: 'center', gap: '4px',
-        gridoutFlow: 'column'}}>
+    <div className="App">
      <BasicCard/>
      <BasicCard/>
     </div>

@@ -1,16 +1,14 @@
-import logo from './logo.svg';
 import React from 'react'
-import ReactDOM from 'react-dom';
-import Clock from "./Clock";
-
 import './App.css';
+import CardsGrid from "./components/CardsGrid";
+
 
 function App() {
-  return (
-    <div className="App">
-      <Clock date={new Date()}/>
-    </div>
-  );
+    return (
+        <div className="App">
+            <CardsGrid/>
+        </div>
+    );
 }
 
 export default App;

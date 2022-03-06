@@ -1,6 +1,7 @@
 import OutlinedCard from './BasicCard'
 import * as React from "react";
 import styled from 'styled-components'
+import {useEffect, useState} from "react";
 
 const CardsGridStyled = styled.div`
   display: grid;
@@ -8,17 +9,26 @@ const CardsGridStyled = styled.div`
   grid-gap: 20px;
   align-items: stretch;`
 
-const grid = (
-    <CardsGridStyled>
-        <OutlinedCard/>
-        <OutlinedCard/>
-        <OutlinedCard/>
-    </CardsGridStyled>
 
-);
+async function makeRequest() {
+    return await fetch('https://fakestoreapi.com/products')
+        .then(res => res.json())
+}
+
 
 export default function CardsGrid() {
+    const [values, setValues] = useState([]);
+
+    // Similar to componentDidMount and componentDidUpdate:
+    useEffect(() => {
+        // Update the document title using the browser API
+        makeRequest().then(setValues)
+    }, []);
     return (
-        grid
+        <CardsGridStyled>
+            {
+                values.map(()=><OutlinedCard/> )
+            }
+        </CardsGridStyled>
             );
 }

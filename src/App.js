@@ -1,15 +1,15 @@
 import React from 'react'
 import './App.css';
-import CardsGrid from "./components/CardsGrid";
-import NavTabs from "./components/NavTabs";
+import { Outlet } from "react-router-dom";
+import MyTabs from "./components/MyTabs";
 
 
 function App() {
     return (
         <div className="App">
-            <NavTabs/>
+            <MyTabs/>
+            <Outlet />
             <span>&nbsp;&nbsp;&nbsp;</span>
-            <CardsGrid/>
         </div>
     );
 }

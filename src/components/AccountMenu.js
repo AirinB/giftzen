@@ -6,13 +6,12 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import {Link} from "react-router-dom";
-import Tab from "@mui/material/Tab";
+import {Link as RouterLink,} from "react-router-dom";
+import Link from '@mui/material/Link';
 
 export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -75,19 +74,25 @@ export default function AccountMenu() {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem>
-                    <Avatar />
-                    <Tab label="Profile" value="/profile" to="/profile" component={Link} />
+                    <Link value="/profile" to="/profile" component={RouterLink}>
+                        <Avatar />
+                        Profile
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <Avatar />
-                    <Tab label="Account" value="/account" to="/account" component={Link} />
+                    <Link value="/account" to="/account" component={RouterLink}>
+                        <Avatar />
+                        Account
+                    </Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem>
-                    <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                    </ListItemIcon>
-                    <Tab label="Add another account" value="/new" to="/new" component={Link} />
+                    <Link value="/new" to="/new" component={RouterLink}>
+                        <ListItemIcon>
+                            <PersonAdd fontSize="small" />
+                        </ListItemIcon>
+                        Add another account
+                    </Link>
                 </MenuItem>
                 <MenuItem>
                     <ListItemIcon>

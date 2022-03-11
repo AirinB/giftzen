@@ -11,6 +11,8 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import {Link} from "react-router-dom";
+import Tab from "@mui/material/Tab";
 
 export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -73,17 +75,19 @@ export default function AccountMenu() {
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 <MenuItem>
-                    <Avatar /> Profile
+                    <Avatar />
+                    <Tab label="Profile" value="/profile" to="/profile" component={Link} />
                 </MenuItem>
                 <MenuItem>
-                    <Avatar /> My account
+                    <Avatar />
+                    <Tab label="Account" value="/account" to="/account" component={Link} />
                 </MenuItem>
                 <Divider />
                 <MenuItem>
                     <ListItemIcon>
                         <PersonAdd fontSize="small" />
                     </ListItemIcon>
-                    Add another account
+                    <Tab label="Add another account" value="/new" to="/new" component={Link} />
                 </MenuItem>
                 <MenuItem>
                     <ListItemIcon>

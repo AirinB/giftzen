@@ -9,6 +9,8 @@ import Expenses from "./routes/expenses";
 import Invoices from "./routes/invoices";
 import Account from "./routes/account";
 import Profile from "./routes/profile";
+import NotFound from "./routes/404";
+import Settings from "./routes/settings";
 import NewAccount from "./routes/new";
 
 const rootElement = document.getElementById("root");
@@ -21,12 +23,11 @@ render(
                 <Route path="profile" element={<Profile />} />
                 <Route path="account" element={<Account />} />
                 <Route path="new" element={<NewAccount />} />
+                <Route path="settings" element={<Settings />} />
                 <Route
                     path="*"
                     element={
-                        <main style={{ padding: "1rem" }}>
-                            <p>There's nothing here!</p>
-                        </main>
+                        <NotFound/>
                     }
                 />
             </Route>

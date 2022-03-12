@@ -95,10 +95,12 @@ export default function AccountMenu() {
                     </Link>
                 </MenuItem>
                 <MenuItem>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Settings
+                    <Link value="/settings" to="/settings" component={RouterLink}>
+                        <ListItemIcon>
+                            <Settings fontSize="small" />
+                        </ListItemIcon>
+                        Settings
+                    </Link>
                 </MenuItem>
                 <MenuItem>
                     <ListItemIcon>

@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
-// import Iconify from './iconify';
-// ----------------------------------------------------------------------
 
 export default function RegisterForm() {
     const navigate = useNavigate();

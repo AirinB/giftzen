@@ -1,9 +1,7 @@
-import OutlinedCard from './BasicCard'
 import * as React from "react";
 import styled from 'styled-components'
 import {useEffect, useState} from "react";
 import RecipeReviewCard from "./ComplexCard";
-// import OutlinedCard from "./BasicCard";
 
 const CardsGridStyled = styled.div`
   display: grid;

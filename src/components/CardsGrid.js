@@ -31,7 +31,7 @@ export default function CardsGrid(props) {
                 //                                  description={data.description} image={data.image} rating={data.rating.rate}
                 //                                  count={data.rating.count}/> )
 
-                values.map((data)=><RecipeReviewCard image={data.image} /> )
+                values.map((data)=><RecipeReviewCard image={data.image} title={data.title} price={data.price}/> )
             }
         </CardsGridStyled>
             );

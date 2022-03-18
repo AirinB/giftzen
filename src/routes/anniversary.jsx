@@ -1,9 +1,9 @@
 import CardsGrid from "../components/CardsGrid";
 
-export default function Invoices() {
+export default function Anniversary() {
     return (
         <>
-            <h2>Invoices</h2>
+            <h2>Anniversary</h2>
             <CardsGrid resource={'anniversary'}/>
         </>
     );

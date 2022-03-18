@@ -10,19 +10,19 @@ const CardsGridStyled = styled.div`
   align-items: stretch;`
 
 
-async function makeRequest() {
-    return await fetch('https://fakestoreapi.com/products')
+async function makeRequest(resource) {
+    return await fetch(`https://amazon-mock-server.vercel.app/api/${resource}`)
         .then(res => res.json())
 }
 
 
-export default function CardsGrid() {
+export default function CardsGrid(props) {
     const [values, setValues] = useState([]);
 
     // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => {
         // Update the document title using the browser API
-        makeRequest().then(setValues)
+        makeRequest(props.resource).then(setValues)
     }, []);
     return (
         <CardsGridStyled>

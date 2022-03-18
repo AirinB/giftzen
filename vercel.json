@@ -1,6 +1,5 @@
 {
-  "routes": [
-    { "src": "/invoices", "dest": "/invoices" },
-    { "src": "/expenses", "dest": "/expenses" }
+  "rewrites":  [
+    {"source": "/(.*)", "destination": "/"}
   ]
 }

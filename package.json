@@ -2,7 +2,7 @@
   "name": "giftzen",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://airinb.github.io/giftzen/",
+  "homepage": "https://giftzen.vercel.app/giftzen/",
   "dependencies": {
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",

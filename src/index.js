@@ -5,21 +5,31 @@ import {
     Route,
 } from "react-router-dom";
 import App from "./App";
-import Expenses from "./routes/expenses";
-import Invoices from "./routes/invoices";
+import Christmas from "./routes/christmas";
+import Anniversary from "./routes/anniversary";
 import Account from "./routes/account";
 import SignIn from "./routes/signIn";
 import NotFound from "./routes/404";
 import Settings from "./routes/settings";
 import NewAccount from "./routes/new";
+import Birthday from "./routes/birthday";
+import Valentines from "./routes/valentines";
+import Woman from "./routes/woman";
+import Man from "./routes/man";
 
 const rootElement = document.getElementById("root");
+
 render(
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<App />}>
-                <Route path="expenses" element={<Expenses />} />
-                <Route path="invoices" element={<Invoices />} />
+                <Route path="anniversary" element={<Anniversary />} />
+                <Route path="christmas" element={<Christmas />} />
+                <Route path="birthday" element={<Birthday />} />
+                <Route path="valentines" element={<Valentines />} />
+                <Route path="woman" element={<Woman />} />
+                <Route path="man" element={<Man />} />
+                <Route path="anniversary" element={<Anniversary />} />
                 <Route path="profile" element={<SignIn />} />
                 <Route path="account" element={<Account />} />
                 <Route path="new" element={<NewAccount />} />

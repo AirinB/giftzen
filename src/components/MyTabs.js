@@ -16,8 +16,12 @@ export default function MyTabs() {
     return (
         <Tabs value={location.pathname}>
             {/* <Tab label="Inbox" value="/inbox/:id" to="/inbox/1" component={Link} /> */}
-            <Tab label="Invoices" value="/invoices" to="/invoices" component={Link} />
-            <Tab label="Expenses" value="/expenses" to="/expenses" component={Link} />
+            <Tab label="Anniversary" value="/anniversary" to="/anniversary" component={Link} />
+            <Tab label="Christmas" value="/christmas" to="/Christmas" component={Link} />
+            <Tab label="Birthday" value="/birthday" to="/birthday" component={Link} />
+            <Tab label="Valentines" value="/valentines" to="/valentines" component={Link} />
+            <Tab label="Woman" value="/woman" to="/woman" component={Link} />
+            <Tab label="Man" value="/man" to="/man" component={Link} />
             <AccountMenu/>
         </Tabs>
     );

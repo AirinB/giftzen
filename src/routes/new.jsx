@@ -12,18 +12,40 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from "../components/Copyright";
+import {useState} from "react";
+import {useHistory } from "react-router-dom";
+import {useAuth} from "../contexts/AuthContext";
+
 
 const theme = createTheme();
 
 export default function NewAccount() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
+    const [registerEmail, setRegisterEmail] = useState("");
+    const [RegisterPassword, setRegisterPassword] = useState("");
+
+    const { signup } = useAuth()
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    // const history = useHistory()
+
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        console.log("the data is submitted");
+        console.log(registerEmail + " " + RegisterPassword);
+
+        try {
+            setError("")
+            setLoading(true)
+            await signup(registerEmail, RegisterPassword)
+            // history.push("/")
+        } catch(e) {
+            setError("Failed to create an account");
+            console.log("ERROR: " + e.message);
+        }
+
+        setLoading(false)
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -74,6 +96,7 @@ export default function NewAccount() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    onChange={(event) => {setRegisterEmail(event.target.value)}}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -85,6 +108,7 @@ export default function NewAccount() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    onChange={(event)=>{setRegisterPassword(event.target.value)}}
                                 />
                             </Grid>
                             <Grid item xs={12}>

@@ -9,6 +9,7 @@ import {
   Grid,
   TextField
 } from '@mui/material';
+import {useAuth} from "../../contexts/AuthContext";
 
 const states = [
   {
@@ -26,6 +27,7 @@ const states = [
 ];
 
 export const AccountProfileDetails = (props) => {
+  const { currentUser} = useAuth();
   const [values, setValues] = useState({
     firstName: 'Katarina',
     lastName: 'Smith',
@@ -101,7 +103,7 @@ export const AccountProfileDetails = (props) => {
                 name="email"
                 onChange={handleChange}
                 required
-                value={values.email}
+                value={currentUser?.email}
                 variant="outlined"
               />
             </Grid>

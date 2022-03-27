@@ -13,18 +13,49 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from "../components/Copyright";
-
+import {useState} from "react";
+import {createUserWithEmailAndPassword, onAuthStateChanged, signOut, signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from "../firebase-config";
+import {useAuth} from "../contexts/AuthContext";
 const theme = createTheme();
 
 export default function SignIn() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+
+    const { login } = useAuth();
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    // const history = useHistory();
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+
+        try {
+            setError("");
+            setLoading(true);
+            await login(loginEmail, loginPassword);
+            console.log("Operation completed");
+            // history.push("/");
+        } catch(e) {
+            setError("Failed to log in");
+            console.log(e.message);
+        }
+
+        setLoading(false)
+    }
+
+    //
+    // const login = async (event: React.FormEvent<HTMLFormElement>) => {
+    //     try{
+    //         event.preventDefault();
+    //         const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+    //         console.log(user)
+    //     }catch (e) {
+    //         console.log(e.message);
+    //     }
+    //
+    // }
 
     return (
         <ThemeProvider theme={theme}>
@@ -54,6 +85,7 @@ export default function SignIn() {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            onChange={(event)=>{setLoginEmail(event.target.value)}}
                         />
                         <TextField
                             margin="normal"
@@ -64,6 +96,9 @@ export default function SignIn() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={(event)=>{setLoginPassword(event.target.value)}}
+
+
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
@@ -95,4 +130,73 @@ export default function SignIn() {
             </Container>
         </ThemeProvider>
     );
+}
+
+
+
+export function SignInTemplate() {
+    const [registerEmail, setRegisterEmail] = useState("");
+    const [RegisterPassword, setRegisterPassword] = useState("");
+
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+
+    const [user, setUser] = useState({});
+
+    onAuthStateChanged(auth, (currentUser)=>{
+        setUser(currentUser)
+    });
+
+    const register = async () => {
+        try{
+            const user = await createUserWithEmailAndPassword(auth, registerEmail, RegisterPassword);
+            console.log(user)
+        }catch (e) {
+            console.log(e.message);
+        }
+    }
+
+    const login = async () => {
+        try{
+            const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+            console.log(user)
+        }catch (e) {
+            console.log(e.message);
+        }
+
+    }
+
+    const logout = async () => {
+        await signOut(auth);
+    }
+
+    return(
+        <div>
+            <div>
+                <h3> Register User </h3>
+                <input placeholder="Email..." onChange={(event) => {setRegisterEmail(event.target.value)}}/>
+                <input placeholder="Password..." onChange={(event)=>{setRegisterPassword(event.target.value)}}/>
+                <button onClick={register}> Create User</button>
+            </div>
+
+            <div>
+                <h3> Login </h3>
+                <input
+                    placeholder="Email..."
+                    onChange={(event)=>{setLoginEmail(event.target.value)}}
+                />
+                <input
+                    placeholder="Password..."
+                    onChange={(event)=>{setLoginPassword(event.target.value)}}
+                />
+                <button onClick={login}> Login</button>
+            </div>
+
+            <h4> User Logged In: </h4>
+            {user?.email}
+            <button onClick={logout}> Sign Out</button>
+        </div>
+
+    );
+
 }

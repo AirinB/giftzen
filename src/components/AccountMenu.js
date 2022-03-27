@@ -10,8 +10,10 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import {Link as RouterLink,} from "react-router-dom";
+import {Link as RouterLink} from "react-router-dom";
 import Link from '@mui/material/Link';
+import {useState} from "react";
+import {useAuth} from "../contexts/AuthContext";
 
 export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -22,6 +24,26 @@ export default function AccountMenu() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const [error, setError] = useState("");
+    const { currentUser, logout } = useAuth();
+    // const history = useHistory()
+
+    async function handleLogout() {
+        setError("")
+
+        try {
+            console.log(currentUser.email);
+            await logout()
+            console.log("the user logout");
+            console.log(currentUser?.email);
+            // history.push("/login")
+        } catch(e) {
+            console.log(e.message);
+            setError("Failed to log out")
+        }
+    }
+
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -102,7 +124,7 @@ export default function AccountMenu() {
                         Settings
                     </Link>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>

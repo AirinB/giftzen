@@ -124,12 +124,12 @@ export default function AccountMenu() {
                         Settings
                     </Link>
                 </MenuItem>
-                <MenuItem onClick={handleLogout}>
+                {currentUser&&<MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
                     Logout
-                </MenuItem>
+                </MenuItem>}
             </Menu>
         </React.Fragment>
     );

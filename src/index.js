@@ -16,6 +16,7 @@ import Birthday from "./routes/birthday";
 import Valentines from "./routes/valentines";
 import Woman from "./routes/woman";
 import Man from "./routes/man";
+import PrivateRoute from "./components/PrivateRoute";
 
 const rootElement = document.getElementById("root");
 
@@ -31,9 +32,11 @@ render(
                 <Route path="man" element={<Man />} />
                 <Route path="anniversary" element={<Anniversary />} />
                 <Route path="profile" element={<SignIn />} />
-                <Route path="account" element={<Account />} />
+                <Route element={<PrivateRoute/>}>
+                    <Route path="account" element={<Account />} />
+                    <Route path="settings" element={<Settings />} />
+                </Route>
                 <Route path="new" element={<NewAccount />} />
-                <Route path="settings" element={<Settings />} />
                 <Route
                     path="*"
                     element={

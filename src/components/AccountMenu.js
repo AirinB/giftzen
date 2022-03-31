@@ -95,28 +95,31 @@ export default function AccountMenu() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem>
+                {!currentUser && <MenuItem>
                     <Link value="/profile" to="/profile" component={RouterLink}>
-                        <Avatar />
-                        Profile
+                        <Avatar/>
+                        Log In
                     </Link>
                 </MenuItem>
-                <MenuItem>
+                }
+                {!currentUser&&<MenuItem>
+                    <Link value="/new" to="/new" component={RouterLink}>
+                        <ListItemIcon>
+                            <PersonAdd fontSize="small"/>
+                        </ListItemIcon>
+                        Sing Up
+                    </Link>
+                </MenuItem>
+                }
+                {currentUser&&<MenuItem>
                     <Link value="/account" to="/account" component={RouterLink}>
-                        <Avatar />
+                        <Avatar/>
                         Account
                     </Link>
                 </MenuItem>
+                }
                 <Divider />
-                <MenuItem>
-                    <Link value="/new" to="/new" component={RouterLink}>
-                        <ListItemIcon>
-                            <PersonAdd fontSize="small" />
-                        </ListItemIcon>
-                        Add another account
-                    </Link>
-                </MenuItem>
-                <MenuItem>
+                {currentUser&&<MenuItem>
                     <Link value="/settings" to="/settings" component={RouterLink}>
                         <ListItemIcon>
                             <Settings fontSize="small" />
@@ -124,6 +127,7 @@ export default function AccountMenu() {
                         Settings
                     </Link>
                 </MenuItem>
+                }
                 {currentUser&&<MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout fontSize="small" />

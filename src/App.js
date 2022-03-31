@@ -8,7 +8,6 @@ import {AuthProvider} from "./contexts/AuthContext";
 function App() {
     return (
         <div className="App">
-            {/*TODO create private route*/}
             <AuthProvider>
             <MyTabs/>
             <Outlet />

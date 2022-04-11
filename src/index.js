@@ -17,6 +17,7 @@ import Valentines from "./routes/valentines";
 import Woman from "./routes/woman";
 import Man from "./routes/man";
 import PrivateRoute from "./components/PrivateRoute";
+import NewGift from "./routes/gift";
 
 const rootElement = document.getElementById("root");
 
@@ -37,6 +38,7 @@ render(
                     <Route path="settings" element={<Settings />} />
                 </Route>
                 <Route path="new" element={<NewAccount />} />
+                <Route path="gift" element={<NewGift />} />
                 <Route
                     path="*"
                     element={

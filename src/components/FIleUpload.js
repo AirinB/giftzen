@@ -1,16 +1,18 @@
-import Button from "@mui/material/Button";
 import {useState} from "react";
+import {useAuth} from "../contexts/AuthContext";
 
-export default function FileUpload() {
+export default function FileUpload({setLink}) {
     // State to store uploaded file
     const [file, setFile] = useState("");
+    const { uploadFile } = useAuth();
 
     // Handles file upload event and updates state
-    function handleUpload(event) {
+    async function handleUpload(event) {
+        console.log("FILE SENT TO UPLOAD: ");
+        const link = await uploadFile(event.target.files[0]);
+        console.log("FILE LINK TO DOWNLOAD: " + link);
+        setLink(link);
         setFile(event.target.files[0]);
-
-        // Add code here to upload file to server
-        // ...
     }
 
     return (

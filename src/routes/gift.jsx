@@ -30,6 +30,7 @@ export default function NewGift() {
         //    TODO create state variables for all of the fields
         //  1. create a json object
         //  2. make an http request
+
         const obj = {
             "title": title,
             "price": price,
@@ -134,7 +135,7 @@ export default function NewGift() {
 
                             </Grid>
                             <Grid item xs={12}>
-                                <FileUpload/>
+                                <FileUpload setLink={setPhotoLink}/>
                             </Grid>
                         </Grid>
                         <Link to={'/'} style={{textDecoration: "none"}}>

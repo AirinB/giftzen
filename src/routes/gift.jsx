@@ -26,18 +26,23 @@ export default function NewGift() {
         setCategory(event.target.value);
     };
 
-    function handleSubmit(e) {
-        //    TODO create state variables for all of the fields
-        //  1. create a json object
-        //  2. make an http request
+    async function makePostRequest(data) {
+        // TODO THE BODY DOES NOT SEND IN A GOOD WAY
+        return await fetch(`http://localhost:8080/api/newgift`, {method: "POST", body: JSON.stringify(data)})
+            .then(res =>console.log(res.code, res.message));
+    }
 
+    function handleSubmit(e) {
         const obj = {
             "title": title,
             "price": price,
             "link": productLink,
-            "category": category
+            "category": category,
+            "photoLink": photoLink
         }
         console.log(obj);
+        makePostRequest(obj).then(r => console.log(r.code));
+
     }
 
     function urlPatternValidation(URL){
@@ -138,6 +143,7 @@ export default function NewGift() {
                                 <FileUpload setLink={setPhotoLink}/>
                             </Grid>
                         </Grid>
+                        {/*TODO make it a new page thank you for your contribution */}
                         <Link to={'/'} style={{textDecoration: "none"}}>
                             <Button
                                 type="submit"

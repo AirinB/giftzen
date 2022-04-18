@@ -40,6 +40,10 @@ const stars = (rating)=>{
 export default function ShopProductCard(product) {
     const { name, cover, price, status, priceSale, rating, link, prime } = product;
 
+    function handleChange(e){
+        console.log("Liked!!");
+    }
+
     return (
         <Card>
             <Link href={link} underline="none">
@@ -85,8 +89,10 @@ export default function ShopProductCard(product) {
                         &nbsp;
                         {stars(rating)}
                     </Typography>
-                        <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
+                        <IconButton aria-label="add to favorites" onClick={handleChange}>
+                            <FavoriteIcon
+
+                            />
                         </IconButton>
                 </Stack>
 

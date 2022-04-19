@@ -16,8 +16,8 @@ export default function MyTabs() {
   const location = useLocation();
   const { categories, categoriesByName } = useContext(CategoriesContext);
 
-  // You need to provide the routes in descendant order.
-  // This means that if you have nested routes like:
+  // You need to provide the pages in descendant order.
+  // This means that if you have nested pages like:
   // users, users/new, users/edit.
   // Then the order should be ['users/add', 'users/edit', 'users'].
   // const routeMatch = useRouteMatch(['/inbox/:id', '/drafts', '/trash']);
@@ -35,6 +35,13 @@ export default function MyTabs() {
           component={Link}
         />
       ))}
+      <Tab
+        key={"likedGifts"}
+        label={"Liked Gifts"}
+        value={`/liked-gifts`}
+        to={`/liked-gifts`}
+        component={Link}
+      />
       <AccountMenu />
     </Tabs>
   );

@@ -1,7 +1,8 @@
 import React, { Component, useEffect, useState } from "react";
-import { getCategories } from "../firebase/detabase";
+import { getCategories } from "../firebase/database";
 
 export const CategoriesContext = React.createContext({
+  isLoading: false,
   categories: [],
   categoriesByName: {},
 });
@@ -9,9 +10,10 @@ export const CategoriesContext = React.createContext({
 const CategoriesContextProvider = CategoriesContext.Provider;
 
 export const CategoriesContextWrapper = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-    getCategories(setCategories);
+    getCategories(setCategories).finally(() => setIsLoading(false));
   }, []);
 
   const getCategoriesByName = (categories) => {
@@ -24,7 +26,11 @@ export const CategoriesContextWrapper = ({ children }) => {
 
   return (
     <CategoriesContextProvider
-      value={{ categories, categoriesByName: getCategoriesByName(categories) }}
+      value={{
+        categories,
+        isLoading,
+        categoriesByName: getCategoriesByName(categories),
+      }}
     >
       {children}
     </CategoriesContextProvider>

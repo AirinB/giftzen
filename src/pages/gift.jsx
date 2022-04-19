@@ -19,7 +19,7 @@ import {
 import MenuItem from "@mui/material/MenuItem";
 import { v4 } from "uuid";
 import { CategoriesContext } from "../contexts/CategoriesContext";
-import { addGift, getGiftByAsin } from "../firebase/detabase";
+import { addGift, getGiftByAsin } from "../firebase/database";
 import { AuthContext } from "../contexts/AuthContext";
 import { Alert } from "@mui/lab";
 
@@ -76,8 +76,12 @@ export default function NewGift() {
                 id: v4(),
                 addedBy: currentUser.uid,
                 addedOn: Date.now(),
+                full_link: amazonUrl,
               };
-              await addGift(newGift).catch(() => setIsLoading(false));
+              await addGift(newGift).catch(() => {
+                setMessage("Successfully added new item.");
+              });
+
               setMessage("Successfully added new item.");
               navigate(`/category/${categories[category]}`);
             }

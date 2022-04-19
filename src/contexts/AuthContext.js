@@ -4,10 +4,16 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { upsertUser } from "../firebase/database";
+
+const googleProvider = new GoogleAuthProvider();
+googleProvider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 
 export const AuthContext = React.createContext();
 
@@ -28,9 +34,34 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  function logout() {
-    return signOut(auth);
+  async function logout() {
+    await signOut(auth);
+    setCurrentUser(null);
+    return;
   }
+
+  const loginWithGoogle = async () => {
+    return signInWithPopup(auth, googleProvider)
+      .then(async (result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = await upsertUser(result.user);
+        setCurrentUser(user);
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
 
   function resetPassword(email) {
     return auth.sendPasswordResetEmail(email);
@@ -119,8 +150,13 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    return onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+    return onAuthStateChanged(auth, async (user) => {
+      if (user && user.uid) {
+        await upsertUser(user).then((appUser) => {
+          setCurrentUser(appUser);
+        });
+      }
+      // setCurrentUser(user);
       setLoading(false);
     });
   }, []);
@@ -135,6 +171,7 @@ export function AuthProvider({ children }) {
     updateEmail,
     updatePassword,
     updateUser,
+    loginWithGoogle,
   };
 
   return (

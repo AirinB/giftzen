@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./App.css";
 import { Outlet } from "react-router-dom";
 import MyTabs from "./components/MyTabs";
-import { AuthProvider } from "./contexts/AuthContext";
-import { CategoriesContextWrapper } from "./contexts/CategoriesContext";
+import { CategoriesContext } from "./contexts/CategoriesContext";
 
 function App() {
+  const { isLoading } = useContext(CategoriesContext);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="App">
-      <AuthProvider>
-        <CategoriesContextWrapper>
-          <MyTabs />
-          <Outlet />
-          <span>&nbsp;&nbsp;&nbsp;</span>
-        </CategoriesContextWrapper>
-      </AuthProvider>
+      <MyTabs />
+      <Outlet />
+      <span>&nbsp;&nbsp;&nbsp;</span>
     </div>
   );
 }

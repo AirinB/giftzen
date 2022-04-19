@@ -15,6 +15,10 @@ const stars = (rating)=>{
 }
 export default function RecipeReviewCard(props) {
 
+    function handleChange(){
+        console.log("Liked!!"+props);
+    }
+
     return (
         <Card sx={{ maxWidth: 500 }}>
             <Link href={props.link} underline="none">
@@ -33,7 +37,9 @@ export default function RecipeReviewCard(props) {
             {stars(props.stars)}
             <span className="MuiTypography-root MuiTypography-body1 css-oa3q5l"/>&nbsp;${props.price}
                 <IconButton aria-label="add to favorites">
-                    <FavoriteIcon />
+                    <FavoriteIcon
+                    handleClick={handleChange}
+                    />
                 </IconButton>
         </Card>
     );

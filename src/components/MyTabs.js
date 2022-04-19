@@ -6,12 +6,6 @@ import AccountMenu from "./AccountMenu";
 import { CategoriesContext } from "../contexts/CategoriesContext";
 import { useContext } from "react";
 
-// Capitalize
-const capitalize = (s) => {
-  if (typeof s !== "string") return "";
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
-
 export default function MyTabs() {
   const location = useLocation();
   const { categories, categoriesByName } = useContext(CategoriesContext);

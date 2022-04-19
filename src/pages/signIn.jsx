@@ -14,13 +14,6 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Copyright from "../components/Copyright";
 import { useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth } from "../firebase-config";
 import { useAuth } from "../contexts/AuthContext";
 const theme = createTheme();
 

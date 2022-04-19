@@ -31,11 +31,7 @@ export default function CardsGrid({ categoryId }) {
       setIsLoading(false);
     });
   }, [categoryId]);
-  // Similar to componentDidMount and componentDidUpdate:
-  // useEffect(() => {
-  // Update the document title using the browser API
-  // makeRequest(props.resource).then(setValues)
-  // }, [props.resource]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }

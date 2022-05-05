@@ -35,6 +35,13 @@ export default function MyTabs() {
         value={`/liked-gifts`}
         to={`/liked-gifts`}
         component={Link}
+      />{" "}
+      <Tab
+        key={"wishlists"}
+        label={"Wishlists"}
+        value={`/wishlists`}
+        to={`/wishlists`}
+        component={Link}
       />
       <AccountMenu />
     </Tabs>

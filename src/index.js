@@ -1,17 +1,16 @@
 import { render } from "react-dom";
-import { AuthProvider } from "./contexts/AuthContext";
-import { CategoriesContextWrapper } from "./contexts/CategoriesContext";
-import RouterComponent from "./routerComponent";
-import { UserContextWrapper } from "./contexts/UserContext";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import App from "./Containers/App";
+
+
 const rootElement = document.getElementById("root");
 
 render(
-  <AuthProvider>
-    <CategoriesContextWrapper>
-      <UserContextWrapper>
-        <RouterComponent />
-      </UserContextWrapper>
-    </CategoriesContextWrapper>
-  </AuthProvider>,
+  <BrowserRouter>
+    <Routes>
+      <Route path="/public/*" element={<App isPrivate={false} />} />
+      <Route path="/*" element={<App />} />
+    </Routes>
+  </BrowserRouter>,
   rootElement
 );

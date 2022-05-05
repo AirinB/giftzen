@@ -22,19 +22,20 @@ import { CategoriesContext } from "../contexts/CategoriesContext";
 import { addGift, getGiftByAsin } from "../firebase/database";
 import { AuthContext } from "../contexts/AuthContext";
 import { Alert } from "@mui/lab";
+import { AlertsContext } from "../contexts/AlertsContext";
 
 const theme = createTheme();
 // const baseUrl =  'https://amazon-mock-server.vercel.app'
-const baseUrl = "http://localhost:8080";
+const baseUrl = "http://localhost:3000";
 
 export default function NewGift() {
+  const { setMessage } = useContext(AlertsContext);
   const { currentUser } = useContext(AuthContext);
   const params = useParams();
   const navigate = useNavigate();
   const { categoryName: categoryNameFromProps } = params;
 
   const { categoriesByName, categories } = useContext(CategoriesContext);
-  const [message, setMessage] = useState("");
   const [amazonUrl, setAmazonUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState(
@@ -60,7 +61,7 @@ export default function NewGift() {
     });
     setIsLoading(true);
 
-    fetch(`http://localhost:8080/parse-amazon?url=${amazonUrl}`)
+    fetch(`http://localhost:3000/parse-amazon?url=${amazonUrl}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.asin) {
@@ -112,20 +113,6 @@ export default function NewGift() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Snackbar
-        autoHideDuration={3000}
-        open={!!message}
-        onClose={() => setMessage("")}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <Alert onClose={() => setMessage("")} severity="warning">
-          {message}
-        </Alert>
-      </Snackbar>
-
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

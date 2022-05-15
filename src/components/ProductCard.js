@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-// material
 import {
   Box,
   Card,
@@ -11,18 +10,18 @@ import {
   Backdrop,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-//
 import Label from "./Label";
 import numeral from "numeral";
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { deleteGiftById, likeGift, unlikeGift } from "../firebase/database";
+import { likeGift, unlikeGift } from "../firebase/database";
 import { UserContext } from "../contexts/UserContext";
+import { WishlistsContext } from "../contexts/WishlistContext";
+import { AlertsContext } from "../contexts/AlertsContext";
 
 // ----------------------------------------------------------------------
 
@@ -34,11 +33,14 @@ const StyledCard = styled(Card)`
     top: 0;
     right: 0;
     display: none;
+    flex-direction: column;
+    height: 100%;
   }
 
   :hover {
     .actions-container {
-      display: block;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
     }
   }
 `;
@@ -93,15 +95,24 @@ const stars = (rating) => {
   });
 };
 
-export default function ShopProductCard({ product }) {
+export default function ShopProductCard({ product, getActions }) {
+  const { setMessage } = useContext(AlertsContext);
   const { currentUser } = useContext(AuthContext);
   const { likedGifts } = useContext(UserContext);
+  const { wishlists } = useContext(WishlistsContext);
   const [isLoading, setIsLoading] = useState(false);
   const { title, image, prices, reviews, full_link, prime } = product;
-  const sale = prices.current_price < prices.previous_price;
+  const sale =
+    prices &&
+    prices.current_price &&
+    prices.current_price < prices.previous_price;
 
   function handleChange(e) {
     if (!currentUser || !currentUser.uid) {
+      setMessage(
+        "You must be logged in to add a gift to a wishlist",
+        "warning"
+      );
       return;
     }
 
@@ -112,13 +123,8 @@ export default function ShopProductCard({ product }) {
     }
   }
 
-  const handleDelete = () => {
-    setIsLoading(true);
-    deleteGiftById(product.id).finally(setIsLoading(false));
-  };
+  const hasActions = !!getActions && typeof getActions === "function";
 
-  const canDelete =
-    currentUser && (currentUser.uid === product.addedBy || currentUser.isAdmin);
   return (
     <StyledCard>
       <Link target="_blank" href={full_link} underline="none">
@@ -171,11 +177,15 @@ export default function ShopProductCard({ product }) {
               </Typography>
             )}
             &nbsp;
-            {fCurrency(prices.current_price)}
+            {prices ? fCurrency(prices.current_price) : "N/A"}
             &nbsp;
             {stars(reviews.stars)}
           </Typography>
-          <IconButton aria-label="add to favorites" onClick={handleChange}>
+          <IconButton
+            style={{ zIndex: 1 }}
+            aria-label="add to favorites"
+            onClick={handleChange}
+          >
             <FavoriteIcon
               style={{ color: likedGifts[product.id] ? "red" : undefined }}
             />
@@ -187,14 +197,8 @@ export default function ShopProductCard({ product }) {
           )}
         </Stack>
       </Stack>
-      {!!canDelete && (
-        <div className="actions-container">
-          <IconButton aria-label="add to favorites" onClick={handleDelete}>
-            <Tooltip title="Delete">
-              <DeleteIcon />
-            </Tooltip>
-          </IconButton>
-        </div>
+      {!!currentUser && hasActions && (
+        <div className="actions-container">{getActions()}</div>
       )}
       <Backdrop
         sx={{

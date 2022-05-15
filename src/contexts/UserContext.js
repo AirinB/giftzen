@@ -10,8 +10,8 @@ export const UserContext = React.createContext({
 const UserContextProvider = UserContext.Provider;
 
 export const UserContextWrapper = ({ children }) => {
-  const { currentUser } = useContext(AuthContext);
   const [likedGifts, setLikedGifts] = useState({});
+  const { currentUser } = useContext(AuthContext);
   const { uid: userId } = currentUser || {};
 
   useEffect(() => {

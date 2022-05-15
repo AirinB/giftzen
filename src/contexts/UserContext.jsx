@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { getUserLikedGifts } from "../firebase/database";
-import { AuthContext } from "./AuthContext";
-import { indexBy, prop } from "ramda";
+import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { getUserLikedGifts } from '../firebase/database';
+import { AuthContext } from './AuthContext';
+import { indexBy, prop } from 'ramda';
 
 export const UserContext = React.createContext({
   likedGifts: {},
@@ -16,9 +17,11 @@ export const UserContextWrapper = ({ children }) => {
 
   useEffect(() => {
     if (!userId) return;
+
     const unsubscribe = getUserLikedGifts(userId, (data) => {
-      setLikedGifts(indexBy(prop("giftId"), data));
+      setLikedGifts(indexBy(prop('giftId'), data));
     });
+
     return () => {
       unsubscribe();
     };
@@ -33,4 +36,8 @@ export const UserContextWrapper = ({ children }) => {
       {children}
     </UserContextProvider>
   );
+};
+
+UserContextWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
 };

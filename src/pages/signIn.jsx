@@ -1,59 +1,40 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Copyright from "../components/Copyright";
-import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { Link as RouterLink } from 'react-router-dom';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Copyright from '../components/Copyright';
+import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { useAlerts } from '../contexts/AlertsContext';
 const theme = createTheme();
 
 export default function SignIn() {
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
   const { login, loginWithGoogle } = useAuth();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  // const history = useHistory();
+  const { setMessage } = useAlerts();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
-      setError("");
-      setLoading(true);
       await login(loginEmail, loginPassword);
-      console.log("Operation completed");
-      // history.push("/");
+      setMessage('Successfully logged in!', 'success');
     } catch (e) {
-      setError("Failed to log in");
-      console.log(e.message);
+      setMessage('Failed to log in', 'error');
     }
-
-    setLoading(false);
   }
-
-  //
-  // const login = async (event: React.FormEvent<HTMLFormElement>) => {
-  //     try{
-  //         event.preventDefault();
-  //         const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-  //         console.log(user)
-  //     }catch (e) {
-  //         console.log(e.message);
-  //     }
-  //
-  // }
 
   return (
     <ThemeProvider theme={theme}>
@@ -62,23 +43,18 @@ export default function SignIn() {
         <Box
           sx={{
             marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -109,30 +85,20 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>
-            <Button
-              onClick={loginWithGoogle}
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+            <Button onClick={loginWithGoogle} fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In with Google
             </Button>
             <Grid container>
-              <Grid item xs>
+              {/* <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
                 </Link>
-              </Grid>
+              </Grid> */}
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link to="/register" variant="body2" component={RouterLink}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

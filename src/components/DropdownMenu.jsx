@@ -1,35 +1,47 @@
-import * as React from "react";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuItem from "@mui/material/MenuItem";
-import MenuList from "@mui/material/MenuList";
-import IconButton from "@mui/material/IconButton";
+import { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import IconButton from '@mui/material/IconButton';
+
+MenuListComposition.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      id: PropTypes.string,
+    })
+  ).isRequired,
+  onClick: PropTypes.func.isRequired,
+  getIcon: PropTypes.func,
+};
 
 export default function MenuListComposition({
   options = [],
   onClick = () => null,
   getIcon = () => null,
 }) {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
 
   const handleOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = (event) => {
+  const handleClose = () => {
     setOpen(false);
   };
 
   function handleListKeyDown(event) {
-    if (event.key === "Tab") {
+    if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
       return;
     }
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
       setOpen(false);
     }
   }
@@ -49,8 +61,7 @@ export default function MenuListComposition({
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin:
-                placement === "bottom-start" ? "left top" : "left bottom",
+              transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
             }}
           >
             <Paper>

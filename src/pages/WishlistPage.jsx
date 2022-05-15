@@ -1,19 +1,15 @@
-import { CardsGridStyled } from "../components/CardsGrid";
-import React, { useContext, useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
-import { WishlistsContext } from "../contexts/WishlistContext";
-import { AuthContext } from "../contexts/AuthContext";
-import ShopProductCard from "../components/ProductCard";
-import {
-  getGiftsByWishlistId,
-  getUserById,
-  removeGiftFromWishlist,
-} from "../firebase/database";
-import { usePublicPages } from "../hooks/publicPages";
-import { Tooltip } from "@mui/material";
-import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
-import { AlertsContext } from "../contexts/AlertsContext";
-import IconButton from "@mui/material/IconButton";
+import { CardsGridStyled } from '../components/CardsGrid';
+import React, { useContext, useEffect, useState } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
+import { WishlistsContext } from '../contexts/WishlistContext';
+import { AuthContext } from '../contexts/AuthContext';
+import ShopProductCard from '../components/ProductCard';
+import { getGiftsByWishlistId, getUserById, removeGiftFromWishlist } from '../firebase/database';
+import { usePublicPages } from '../hooks/publicPages';
+import { Tooltip } from '@mui/material';
+import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
+import { AlertsContext } from '../contexts/AlertsContext';
+import IconButton from '@mui/material/IconButton';
 
 export default function WishlistPage() {
   const { setMessage } = useContext(AlertsContext);
@@ -22,6 +18,7 @@ export default function WishlistPage() {
   const isPublicPage = usePublicPages();
   const params = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [productIsLoading, setProductIsLoading] = useState({});
   const [values, setValues] = useState([]);
   const [wishlistAuthor, setWishlistAuthor] = useState(null);
   const { uid: userId } = currentUser || {};
@@ -54,13 +51,23 @@ export default function WishlistPage() {
 
   const getActions = (product) => {
     const handleRemoveFromWishlist = () => {
-      console.log("should remove gift", wishlistId, product.id);
+      setProductIsLoading((productsLoadingState) => ({
+        ...productsLoadingState,
+        [product.id]: true,
+      }));
+      console.log('should remove gift', wishlistId, product.id);
       removeGiftFromWishlist(wishlistId, product.id)
         .then(() => {
-          setMessage("Gift removed from wishlist", "success");
+          setMessage('Gift removed from wishlist', 'success');
         })
         .catch(() => {
-          setMessage("Error removing gift from wishlist", "error");
+          setMessage('Error removing gift from wishlist', 'error');
+        })
+        .finally(() => {
+          setProductIsLoading((productsLoadingState) => ({
+            ...productsLoadingState,
+            [product.id]: false,
+          }));
         });
     };
 
@@ -86,6 +93,8 @@ export default function WishlistPage() {
         <CardsGridStyled>
           {values.map((data) => (
             <ShopProductCard
+              key={`product-card-${data.id}`}
+              isLoading={productIsLoading[data.id]}
               getActions={() => getActions(data)}
               product={data}
             />

@@ -1,6 +1,6 @@
-import { Box, Container, Typography } from "@mui/material";
-import { DashboardLayout } from "../components/dashboard-layout";
-import { SettingsPassword } from "../components/settings/settings-password";
+import { Box, Container, Typography } from '@mui/material';
+import { DashboardLayout } from '../components/dashboard-layout';
+import { SettingsPassword } from '../components/settings/settings-password';
 
 const Settings = () => (
   <>

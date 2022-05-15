@@ -1,9 +1,9 @@
-import CardsGrid from "../components/CardsGrid";
-import StyledButton from "../components/StyledButton";
-import React, { useContext } from "react";
-import { CategoriesContext } from "../contexts/CategoriesContext";
-import { Navigate, useParams } from "react-router-dom";
-import { capitalize } from "@mui/material";
+import CardsGrid from '../components/CardsGrid';
+import AddGiftButton from '../components/AddGiftButton';
+import React, { useContext } from 'react';
+import { CategoriesContext } from '../contexts/CategoriesContext';
+import { Navigate, useParams } from 'react-router-dom';
+import { capitalize } from '@mui/material';
 
 export default function CategoryPage() {
   const { categoriesByName } = useContext(CategoriesContext);
@@ -16,7 +16,7 @@ export default function CategoryPage() {
   return (
     <>
       <h2>{capitalize(categoryName)}</h2>
-      <StyledButton categoryName={categoryName} />
+      <AddGiftButton categoryName={categoryName} />
       <CardsGrid categoryId={categoriesByName[categoryName]} />
     </>
   );

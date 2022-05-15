@@ -10,13 +10,13 @@ import {
   remove,
   push,
   update,
-} from "firebase/database";
-import { prop, sort, descend, uniq, without } from "ramda";
-import { database, auth } from "../firebase-config";
+} from 'firebase/database';
+import { prop, sort, descend, uniq, without } from 'ramda';
+import { database, auth } from '../firebase-config';
 
 export const getCategories = (onData = () => null) => {
   return new Promise((resolve, reject) => {
-    const categoryRef = ref(database, "category");
+    const categoryRef = ref(database, 'category');
     return onValue(
       categoryRef,
       (snapshot) => {
@@ -29,21 +29,10 @@ export const getCategories = (onData = () => null) => {
   });
 };
 
-const withDefaultDate = (date) => {
-  if (!date) {
-    return 0;
-  }
-  return date;
-};
-
 export const getGiftsByCategoryId = (categoryId, onData = () => null) => {
   return new Promise((resolve, reject) => {
-    const giftsRef = ref(database, "gift");
-    const filteredRef = query(
-      giftsRef,
-      orderByChild("categoryId"),
-      equalTo(categoryId)
-    );
+    const giftsRef = ref(database, 'gift');
+    const filteredRef = query(giftsRef, orderByChild('categoryId'), equalTo(categoryId));
 
     onValue(
       filteredRef,
@@ -53,7 +42,7 @@ export const getGiftsByCategoryId = (categoryId, onData = () => null) => {
           ...gift,
           addedOn: gift.addedOn || 0,
         }));
-        const sorted = sort(descend(prop("addedOn")), gifts);
+        const sorted = sort(descend(prop('addedOn')), gifts);
         onData(sorted);
         resolve(sorted);
       },
@@ -66,8 +55,8 @@ export const getGiftsByCategoryId = (categoryId, onData = () => null) => {
 };
 
 export const getGiftByAsin = (asin, onData = () => null) => {
-  const giftsRef = ref(database, "gift");
-  const filteredRef = query(giftsRef, orderByChild("asin"), equalTo(asin));
+  const giftsRef = ref(database, 'gift');
+  const filteredRef = query(giftsRef, orderByChild('asin'), equalTo(asin));
 
   return new Promise((resolve, reject) => {
     onValue(
@@ -78,6 +67,7 @@ export const getGiftByAsin = (asin, onData = () => null) => {
         onData(gifts);
         resolve(gifts);
       },
+      reject,
       {
         once: true,
       }
@@ -96,19 +86,26 @@ export const deleteGiftById = (id) => {
   return remove(giftsRef);
 };
 
-export const upsertUser = async (firebaseUser) => {
+export const upsertUser = async (firebaseUser, updateValues = {}) => {
   const usersRef = ref(database, `user/${firebaseUser.uid}`);
   const user = await get(usersRef);
   if (user.exists()) {
-    return user.val();
+    const existingUser = user.val();
+    const updated = {
+      ...existingUser,
+      ...updateValues,
+    };
+    await set(usersRef, updated);
+    return updated;
   } else {
     const newUser = {
       name: firebaseUser.displayName,
       email: firebaseUser.email,
       photoUrl: firebaseUser.photoURL,
       uid: firebaseUser.uid,
-      isAdmin: false,
-      createdOn: Date.now(),
+      isAdmin: firebaseUser.isAdmin || false,
+      createdOn: firebaseUser.createdOn || Date.now(),
+      ...updateValues,
     };
     await set(usersRef, newUser);
     return newUser;
@@ -140,17 +137,15 @@ export const likeGift = (giftId, userId) => {
 };
 
 export const unlikeGift = async (giftId, userId) => {
-  const likesRef = ref(database, "likes");
-  const filteredRef = query(likesRef, orderByChild("giftId"), equalTo(giftId));
+  const likesRef = ref(database, 'likes');
+  const filteredRef = query(likesRef, orderByChild('giftId'), equalTo(giftId));
 
   return new Promise((resolve, reject) => {
     const unsubscribe = onValue(
       filteredRef,
       async (snapshot) => {
         const response = snapshot.val() || {};
-        const [entry] = Object.entries(response).filter(
-          ([, value]) => value.userId === userId
-        );
+        const [entry] = Object.entries(response).filter(([, value]) => value.userId === userId);
         if (entry) {
           await remove(ref(database, `likes/${entry[0]}`));
         }
@@ -167,7 +162,7 @@ export const unlikeGift = async (giftId, userId) => {
 
 export const getUserLikedGifts = (userId, onData = () => null) => {
   const likesRef = ref(database, `likes`);
-  const filteredRef = query(likesRef, orderByChild("userId"), equalTo(userId));
+  const filteredRef = query(likesRef, orderByChild('userId'), equalTo(userId));
 
   return onValue(filteredRef, (snapshot) => {
     const response = snapshot.val();
@@ -177,7 +172,7 @@ export const getUserLikedGifts = (userId, onData = () => null) => {
 };
 
 export const getGiftsByIds = (giftIds, onData = () => null) => {
-  const giftsRef = ref(database, "gift");
+  const giftsRef = ref(database, 'gift');
   const unsubscribeGifts = onValue(
     giftsRef,
     (snapshot) => {
@@ -194,8 +189,8 @@ export const getGiftsByIds = (giftIds, onData = () => null) => {
 };
 
 export const getLikedGifts = (userId, onData) => {
-  const likesRef = ref(database, "likes");
-  const filteredRef = query(likesRef, orderByChild("userId"), equalTo(userId));
+  const likesRef = ref(database, 'likes');
+  const filteredRef = query(likesRef, orderByChild('userId'), equalTo(userId));
   console.log({ userId }, filteredRef);
   return onValue(filteredRef, (snapshot) => {
     const response = snapshot.val();
@@ -212,10 +207,10 @@ export const createWishlist = (wishlist) => {
   const userId = auth.currentUser.uid;
 
   if (!userId) {
-    throw new Error("User not logged in!");
+    throw new Error('User not logged in!');
   }
 
-  const wishlistsRef = ref(database, "wishlist");
+  const wishlistsRef = ref(database, 'wishlist');
   return push(wishlistsRef, {
     userId,
     ...wishlist,
@@ -225,7 +220,7 @@ export const createWishlist = (wishlist) => {
 };
 
 export const getWishlistById = (wishlistId, onData = () => null) => {
-  const wishlistsRef = ref(database, "wishlist");
+  const wishlistsRef = ref(database, 'wishlist');
   const filteredRef = query(wishlistsRef, orderByKey(), equalTo(wishlistId));
 
   return onValue(filteredRef, (snapshot) => {
@@ -241,12 +236,8 @@ export const getWishlists = (onData) => {
     return onData({});
   }
 
-  const wishlistsRef = ref(database, "wishlist");
-  const filteredRef = query(
-    wishlistsRef,
-    orderByChild("userId"),
-    equalTo(userId)
-  );
+  const wishlistsRef = ref(database, 'wishlist');
+  const filteredRef = query(wishlistsRef, orderByChild('userId'), equalTo(userId));
   return onValue(filteredRef, (snapshot) => {
     const response = snapshot.val();
     const wishlists = response || {};

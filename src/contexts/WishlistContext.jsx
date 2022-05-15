@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { getWishlistById, getWishlists } from "../firebase/database";
-import { AuthContext } from "./AuthContext";
-import { useMatch, useParams } from "react-router-dom";
-import { usePublicPages } from "../hooks/publicPages";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { getWishlistById, getWishlists } from '../firebase/database';
+import { useMatch } from 'react-router-dom';
+import { usePublicPages } from '../hooks/publicPages';
 
 export const WishlistsContext = React.createContext({
   wishlists: [],
@@ -12,10 +12,8 @@ const WishlistsContextProvider = WishlistsContext.Provider;
 
 export const WishlistsContextWrapper = ({ children }) => {
   const isPublic = usePublicPages();
-  const match = useMatch("/public/wishlists/:wishlistId");
+  const match = useMatch('/public/wishlists/:wishlistId');
   const [wishlists, setWishlists] = useState([]);
-  const { currentUser } = useContext(AuthContext);
-  const { uid: userId } = currentUser || {};
 
   const { wishlistId } = match ? match.params : {};
 
@@ -35,4 +33,8 @@ export const WishlistsContextWrapper = ({ children }) => {
       {children}
     </WishlistsContextProvider>
   );
+};
+
+WishlistsContextWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
 };

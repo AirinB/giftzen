@@ -4,23 +4,20 @@ import { Box, Button, Card, CardContent, CardHeader, Divider, TextField } from '
 export const SettingsPassword = (props) => {
   const [values, setValues] = useState({
     password: '',
-    confirm: ''
+    confirm: '',
   });
 
   const handleChange = (event) => {
     setValues({
       ...values,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
   return (
     <form {...props}>
       <Card>
-        <CardHeader
-          subheader="Update password"
-          title="Password"
-        />
+        <CardHeader subheader="Update password" title="Password" />
         <Divider />
         <CardContent>
           <TextField
@@ -49,13 +46,10 @@ export const SettingsPassword = (props) => {
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
-            p: 2
+            p: 2,
           }}
         >
-          <Button
-            color="primary"
-            variant="contained"
-          >
+          <Button color="primary" variant="contained">
             Update
           </Button>
         </Box>

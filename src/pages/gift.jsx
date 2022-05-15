@@ -1,32 +1,24 @@
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import {
-  capitalize,
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  Select,
-  Snackbar,
-} from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import { v4 } from "uuid";
-import { CategoriesContext } from "../contexts/CategoriesContext";
-import { addGift, getGiftByAsin } from "../firebase/database";
-import { AuthContext } from "../contexts/AuthContext";
-import { Alert } from "@mui/lab";
-import { AlertsContext } from "../contexts/AlertsContext";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { capitalize, CircularProgress, FormControl, InputLabel, Select } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import { v4 } from 'uuid';
+import { CategoriesContext } from '../contexts/CategoriesContext';
+import { addGift, getGiftByAsin } from '../firebase/database';
+import { AuthContext } from '../contexts/AuthContext';
+import { AlertsContext } from '../contexts/AlertsContext';
 
 const theme = createTheme();
-// const baseUrl =  'https://amazon-mock-server.vercel.app'
-const baseUrl = "http://localhost:3000";
+// eslint-disable-next-line no-undef
+const baseUrl = process.env.REACT_APP_AMAZON_MOCK_SERVER || 'http://localhost:3000';
 
 export default function NewGift() {
   const { setMessage } = useContext(AlertsContext);
@@ -36,12 +28,10 @@ export default function NewGift() {
   const { categoryName: categoryNameFromProps } = params;
 
   const { categoriesByName, categories } = useContext(CategoriesContext);
-  const [amazonUrl, setAmazonUrl] = useState("");
+  const [amazonUrl, setAmazonUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [category, setCategory] = useState(
-    categoriesByName[categoryNameFromProps]
-  );
-  const [isValidLink, setIsValidLink] = useState("");
+  const [category, setCategory] = useState(categoriesByName[categoryNameFromProps]);
+  const [isValidLink, setIsValidLink] = useState('');
 
   useEffect(() => {
     setCategory(categoriesByName[categoryNameFromProps]);
@@ -61,15 +51,15 @@ export default function NewGift() {
     });
     setIsLoading(true);
 
-    fetch(`http://localhost:3000/parse-amazon?url=${amazonUrl}`)
+    fetch(`${baseUrl}/parse-amazon?url=${amazonUrl}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.asin) {
           getGiftByAsin(data.asin).then(async (gifts) => {
             if (gifts && gifts.length > 0) {
               // TODO: Add stat in UI.
-              console.log("Gift already exists");
-              setMessage("Gift already exists");
+              console.log('Gift already exists');
+              setMessage('Gift already exists');
             } else {
               const newGift = {
                 ...data,
@@ -80,10 +70,10 @@ export default function NewGift() {
                 full_link: amazonUrl,
               };
               await addGift(newGift).catch(() => {
-                setMessage("Successfully added new item.");
+                setMessage('Successfully added new item.');
               });
 
-              setMessage("Successfully added new item.");
+              setMessage('Successfully added new item.');
               navigate(`/category/${categories[category]}`);
             }
             setIsLoading(false);
@@ -96,9 +86,7 @@ export default function NewGift() {
   }
 
   function urlPatternValidation(URL) {
-    const regex = new RegExp(
-      "(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?"
-    );
+    const regex = new RegExp('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?');
     return regex.test(URL);
   }
 
@@ -118,9 +106,9 @@ export default function NewGift() {
         <Box
           sx={{
             marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <Typography component="h1" variant="h5">
@@ -128,7 +116,7 @@ export default function NewGift() {
           </Typography>
 
           <Box component="form" noValidate sx={{ mt: 6 }}>
-            <Grid item xs={6} sl={6} style={{ margin: "0 0 10px 0" }}>
+            <Grid item xs={6} sl={6} style={{ margin: '0 0 10px 0' }}>
               <FormControl fullWidth required>
                 <InputLabel id="demo-simple-select-label">Category</InputLabel>
                 <Select
@@ -138,13 +126,11 @@ export default function NewGift() {
                   label="Category"
                   onChange={handleChange}
                 >
-                  {Object.entries(categories).map(
-                    ([categoryId, categoryName]) => (
-                      <MenuItem key={categoryId} value={categoryId}>
-                        {capitalize(categoryName)}
-                      </MenuItem>
-                    )
-                  )}
+                  {Object.entries(categories).map(([categoryId, categoryName]) => (
+                    <MenuItem key={categoryId} value={categoryId}>
+                      {capitalize(categoryName)}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -164,7 +150,7 @@ export default function NewGift() {
               </Grid>
             </Grid>
             {/*TODO make it a new page thank you for your contribution */}
-            <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Link to={'/'} style={{ textDecoration: 'none' }}>
               <Button
                 type="submit"
                 fullWidth

@@ -1,20 +1,20 @@
-import React, { useContext, useState } from "react";
-import { Button, capitalize, TextField } from "@mui/material";
-import { WishlistsContext } from "../contexts/WishlistContext";
-import { createWishlist } from "../firebase/database";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from 'react';
+import { Button, capitalize, TextField } from '@mui/material';
+import { WishlistsContext } from '../contexts/WishlistContext';
+import { createWishlist } from '../firebase/database';
+import { Link } from 'react-router-dom';
 
 export default function WishlistsPage() {
   const { wishlists } = useContext(WishlistsContext);
-  const [wishlistName, setWishlistName] = useState("");
+  const [wishlistName, setWishlistName] = useState('');
   const [inputErrors, setInputErros] = useState([]);
 
   const submitNewWishlist = () => {
     if (!wishlistName) {
-      setInputErros(["Wishlist name is required"]);
+      setInputErros(['Wishlist name is required']);
       return;
     }
-    setWishlistName("");
+    setWishlistName('');
     createWishlist({ title: wishlistName });
   };
 
@@ -29,7 +29,7 @@ export default function WishlistsPage() {
         {Object.keys(wishlists).length === 0 && <h1>No wishlists yet!</h1>}
         <TextField
           error={inputErrors.length > 0}
-          helperText={inputErrors.join(", ")}
+          helperText={inputErrors.join(', ')}
           value={wishlistName}
           onChange={changeInput}
         />

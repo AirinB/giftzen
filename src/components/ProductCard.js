@@ -16,18 +16,10 @@ import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import {
-  addGiftToWishlist,
-  deleteGiftById,
-  likeGift,
-  unlikeGift,
-} from "../firebase/database";
+import { likeGift, unlikeGift } from "../firebase/database";
 import { UserContext } from "../contexts/UserContext";
-import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
-import DropDownMenu from "./DropdownMenu";
 import { WishlistsContext } from "../contexts/WishlistContext";
 import { AlertsContext } from "../contexts/AlertsContext";
 
@@ -189,7 +181,11 @@ export default function ShopProductCard({ product, getActions }) {
             &nbsp;
             {stars(reviews.stars)}
           </Typography>
-          <IconButton aria-label="add to favorites" onClick={handleChange}>
+          <IconButton
+            style={{ zIndex: 1 }}
+            aria-label="add to favorites"
+            onClick={handleChange}
+          >
             <FavoriteIcon
               style={{ color: likedGifts[product.id] ? "red" : undefined }}
             />

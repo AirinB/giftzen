@@ -139,21 +139,20 @@ export const likeGift = (giftId, userId) => {
   });
 };
 
-export const unlikeGift = (giftId, userId) => {
+export const unlikeGift = async (giftId, userId) => {
   const likesRef = ref(database, "likes");
   const filteredRef = query(likesRef, orderByChild("giftId"), equalTo(giftId));
+
   return new Promise((resolve, reject) => {
     const unsubscribe = onValue(
       filteredRef,
       async (snapshot) => {
         const response = snapshot.val() || {};
-        const likes = Object.entries(response).map(([key, value]) => ({
-          ...value,
-          key,
-        }));
-        const like = likes.find((like) => like.userId === userId);
-        if (like) {
-          await remove(ref(database, `likes/${like.key}`));
+        const [entry] = Object.entries(response).filter(
+          ([, value]) => value.userId === userId
+        );
+        if (entry) {
+          await remove(ref(database, `likes/${entry[0]}`));
         }
         unsubscribe();
         resolve();

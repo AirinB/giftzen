@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { getLikedGifts } from "../firebase/database";
-import ShopProductCard from "../components/ProductCard";
-import { CardsGridStyled } from "../components/CardsGrid";
-import { AuthContext } from "../contexts/AuthContext";
+import React, { useContext, useEffect, useState } from 'react';
+import { getLikedGifts } from '../firebase/database';
+import ShopProductCard from '../components/ProductCard';
+import { CardsGridStyled } from '../components/CardsGrid';
+import { AuthContext } from '../contexts/AuthContext';
 
 export default function LikedGiftsPage() {
   const { currentUser } = useContext(AuthContext);
@@ -10,7 +10,7 @@ export default function LikedGiftsPage() {
   const [values, setValues] = useState([]);
   const { uid: userId } = currentUser || {};
   useEffect(() => {
-    console.log("in effect,", { userId });
+    console.log('in effect,', { userId });
     if (!userId) return;
     setIsLoading(true);
 
@@ -27,7 +27,7 @@ export default function LikedGiftsPage() {
       {!isLoading && (
         <CardsGridStyled>
           {values.map((data) => (
-            <ShopProductCard product={data} />
+            <ShopProductCard key={`product-card-${data.id}`} product={data} />
           ))}
         </CardsGridStyled>
       )}

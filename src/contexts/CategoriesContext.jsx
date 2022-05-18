@@ -1,11 +1,14 @@
-import React, { Component, useEffect, useState } from "react";
-import { getCategories } from "../firebase/database";
+import React, { useEffect, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { getCategories } from '../firebase/database';
 
 export const CategoriesContext = React.createContext({
   isLoading: false,
   categories: [],
   categoriesByName: {},
 });
+
+export const useCategories = () => useContext(CategoriesContext);
 
 const CategoriesContextProvider = CategoriesContext.Provider;
 
@@ -35,4 +38,8 @@ export const CategoriesContextWrapper = ({ children }) => {
       {children}
     </CategoriesContextProvider>
   );
+};
+
+CategoriesContextWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
 };
